@@ -1,1 +1,9 @@
+clientName:
+  ribbon:
+    retryableStatusCodes: 404,502
 
+
+client:
+  ribbon:
+    MaxAutoRetries: 2
+    MaxAutoRetriesNextServer: 2
