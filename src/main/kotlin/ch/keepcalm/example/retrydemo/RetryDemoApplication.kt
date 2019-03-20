@@ -1,30 +1,22 @@
 package ch.keepcalm.example.retrydemo
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.client.RestTemplateBuilder
-import org.springframework.cloud.client.loadbalancer.LoadBalanced
+import org.springframework.cloud.client.loadbalancer.LoadBalancedRetryFactory
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.http.HttpMethod
+import org.springframework.retry.annotation.Backoff
+import org.springframework.retry.annotation.EnableRetry
+import org.springframework.retry.annotation.Recover
 import org.springframework.retry.annotation.Retryable
+import org.springframework.retry.backoff.BackOffPolicy
+import org.springframework.retry.backoff.ExponentialBackOffPolicy
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.client.RestTemplate
-import org.springframework.web.client.exchange
-import org.springframework.web.client.getForEntity
-import javax.xml.ws.ServiceMode
-import org.springframework.retry.backoff.ExponentialBackOffPolicy
-import org.springframework.retry.backoff.BackOffPolicy
-import org.springframework.cloud.client.loadbalancer.LoadBalancedRetryFactory
-import org.springframework.remoting.RemoteAccessException
-import org.springframework.retry.annotation.Backoff
-import org.springframework.retry.annotation.EnableRetry
-import org.springframework.retry.annotation.Recover
 import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestTemplate
 
 
 @SpringBootApplication
@@ -34,8 +26,6 @@ class RetryDemoApplication() {
     fun restTemplate(restTemplateBuilder: RestTemplateBuilder): RestTemplate {
         return restTemplateBuilder.build()
     }
-
-
 
     @Bean
     fun retryFactory(): LoadBalancedRetryFactory {
