@@ -5,6 +5,7 @@ import org.springframework.boot.runApplication
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.cloud.client.loadbalancer.LoadBalancedRetryFactory
 import org.springframework.context.annotation.Bean
+import org.springframework.remoting.RemoteAccessException
 import org.springframework.retry.annotation.Backoff
 import org.springframework.retry.annotation.EnableRetry
 import org.springframework.retry.annotation.Recover
@@ -66,7 +67,6 @@ class ChuckNorrisService(private val restTemplate: RestTemplate) {
         return chuckNorris
     }
 
-
     @Retryable(Exception::class, maxAttempts = 5, backoff = Backoff(delay = 1000))
     fun getFoo() {
         println("----------- DO SOMETHNING --------------- ")
@@ -77,11 +77,9 @@ class ChuckNorrisService(private val restTemplate: RestTemplate) {
     fun recoverFoo(e: HttpClientErrorException) {
         // ... panic
         println("----------- PANIC --------------- ")
+        val chuckNorris = this.restTemplate.getForEntity(URL, ChuckNorris::class.java).body
+        println(chuckNorris)
     }
-
-
-
-
 }
 
 data class ChuckNorris(val value: String = "", val url: String = "")
